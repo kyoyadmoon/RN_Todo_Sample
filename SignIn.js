@@ -31,7 +31,7 @@ export default class SignIn extends Component {
   };
 
   signIn = () => {
-    Actions.todoList();
+    Actions.todoList({ username: this.state.username, title: `Hi, ${this.state.username}` });
   };
 
   render() {
