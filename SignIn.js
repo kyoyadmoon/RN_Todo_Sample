@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
   container: {
@@ -7,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center'
-  }, 
+  },
   input: {
     backgroundColor: '#fff',
     height: 40,
@@ -30,8 +31,8 @@ export default class SignIn extends Component {
   };
 
   signIn = () => {
-
-  }
+    Actions.todoList();
+  };
 
   render() {
     return (
