@@ -8,6 +8,7 @@ import {
   View
 } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 const USERNAME = 'USERNAME';
 
 const styles = StyleSheet.create({
@@ -62,7 +63,27 @@ export default class SignIn extends Component {
           style={styles.input}
           onChangeText={this.onChangeText}
         />
-        <Button onPress={this.signIn} title="登入" color="blue" />
+        <Button
+          onPress={this.signIn}
+          title="登入"
+          color="blue"
+        />
+        <View style={{ paddingVertical: 30 }}>
+          <LoginButton
+            onLoginFinished={(error, result) => {
+              if (error) {
+                console.log('login has error: ' + result.error);
+              } else if (result.isCancelled) {
+                console.log('login is cancelled.');
+              } else {
+                AccessToken.getCurrentAccessToken().then(data => {
+                  console.log(data.accessToken.toString());
+                });
+              }
+            }}
+            onLogoutFinished={() => console.log('logout.')}
+          />
+        </View>
       </View>
     );
   }
