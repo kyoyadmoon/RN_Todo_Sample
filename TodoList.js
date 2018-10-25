@@ -7,15 +7,18 @@ import {
   TextInput,
   Button,
   ListView,
-  geolocation
+  Image,
+  TouchableOpacity
 } from "react-native";
-// import { Constants } from 'expo';
+import ImagePicker from "react-native-image-picker";
 
 export default class App extends Component {
   state = {
     inputValue: "",
     todoList: [],
-    geolocation: null
+    geolocation: null,
+    avatarSource: null,
+    avatarSize: null
   };
 
   componentDidMount() {
@@ -55,6 +58,34 @@ export default class App extends Component {
     });
   };
 
+  pickImage = () => {
+    const options = {};
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker Error: ", response.error);
+      } else if (response.customButton) {
+        console.log("User tapped custom button: ", response.customButton);
+      } else {
+        const source = { uri: response.uri };
+
+        // You can also display the image using data:
+        // const source = { uri: "data:image/jpeg;base64," + response.data };
+
+        this.setState({
+          avatarSource: source,
+          avatarSize: {
+            width: response.width,
+            height: response.height
+          }
+        });
+      }
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -72,7 +103,31 @@ export default class App extends Component {
             onChangeText={this._handleTextChange}
             placeholder="Input todo"
           />
-          <Button title="Add" onPress={this._handleSendButtonPress} />
+          {this.state.avatarSource ? (
+            <TouchableOpacity onPress={this.pickImage} style={styles.center}>
+              <Image
+                source={this.state.avatarSource}
+                style={[
+                  styles.uploadAvatar,
+                  {
+                    width:
+                      (this.state.avatarSize.width /
+                        this.state.avatarSize.height) *
+                      150,
+                    height: 150
+                  }
+                ]}
+              />
+            </TouchableOpacity>
+          ) : (
+            <Button
+              title="Add Photo"
+              style={{ marginBottom: 10 }}
+              onPress={this.pickImage}
+            />
+          )}
+          <View height={10} />
+          <Button title="Submit" onPress={this._handleSendButtonPress} />
         </View>
         <FlatList
           data={this.state.todoList}
@@ -130,5 +185,14 @@ const styles = StyleSheet.create({
   },
   todoText: {
     flex: 1
+  },
+  uploadAvatar: {
+    margin: 10,
+    height: 100,
+    width: "auto"
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
