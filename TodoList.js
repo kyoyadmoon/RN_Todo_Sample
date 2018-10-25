@@ -42,8 +42,16 @@ export default class App extends Component {
       return;
     }
     this.setState(prevState => ({
-      todoList: [...prevState.todoList, this.state.inputValue],
-      inputValue: ""
+      todoList: [
+        ...prevState.todoList,
+        {
+          avatar: this.state.avatarSource,
+          title: this.state.inputValue
+        }
+      ],
+      inputValue: "",
+      avatarSource: null,
+      avatarSize: null
     }));
   };
 
@@ -120,11 +128,7 @@ export default class App extends Component {
               />
             </TouchableOpacity>
           ) : (
-            <Button
-              title="Add Photo"
-              style={{ marginBottom: 10 }}
-              onPress={this.pickImage}
-            />
+            <Button title="Add Photo" onPress={this.pickImage} />
           )}
           <View height={10} />
           <Button title="Submit" onPress={this._handleSendButtonPress} />
@@ -132,10 +136,12 @@ export default class App extends Component {
         <FlatList
           data={this.state.todoList}
           style={styles.listView}
+          keyExtractor={(item, index) => `${index}`}
           renderItem={({ item, index }) => {
             return (
               <View style={styles.todoItem}>
-                <Text style={styles.todoText}>{item}</Text>
+                <Image style={styles.todoAvatar} source={item.avatar} />
+                <Text style={styles.todoText}>{item.title}</Text>
                 <Button
                   title="Delete"
                   onPress={() => {
@@ -194,5 +200,10 @@ const styles = StyleSheet.create({
   center: {
     justifyContent: "center",
     alignItems: "center"
+  },
+  todoAvatar: {
+    marginRight: 15,
+    width: 60,
+    height: 60
   }
 });
