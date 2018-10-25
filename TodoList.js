@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   FlatList,
   Text,
@@ -6,20 +6,30 @@ import {
   StyleSheet,
   TextInput,
   Button,
-  ListView,
-} from 'react-native';
+  ListView
+} from "react-native";
 // import { Constants } from 'expo';
 
 export default class App extends Component {
   state = {
-    inputValue: '',
+    inputValue: "",
     todoList: [],
+    geolocation: null
+  };
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(this.receiveGeolocation);
+  }
+
+  receiveGeolocation = geolocation => {
+    console.log(geolocation);
+    this.setState({ geolocation });
   };
 
   _handleTextChange = value => {
     const inputValue = value;
     this.setState(() => ({
-      inputValue,
+      inputValue
     }));
   };
 
@@ -29,7 +39,7 @@ export default class App extends Component {
     }
     this.setState(prevState => ({
       todoList: [...prevState.todoList, this.state.inputValue],
-      inputValue: '',
+      inputValue: ""
     }));
   };
 
@@ -39,7 +49,7 @@ export default class App extends Component {
         (item, i) => parseInt(id) !== i
       );
       return {
-        todoList,
+        todoList
       };
     });
   };
@@ -47,6 +57,13 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.state.geolocation ? (
+          <Text style={{ marginBottom: 15 }}>
+            {`lng: ${this.state.geolocation.coords.longitude}, lat: ${
+              this.state.geolocation.coords.latitude
+            }`}
+          </Text>
+        ) : null}
         <View style={styles.formView}>
           <TextInput
             style={styles.inputForm}
@@ -82,35 +99,35 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-    backgroundColor: '#eee',
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+    backgroundColor: "#eee"
   },
   formView: {
     borderBottomWidth: 1,
-    borderColor: '#ccc',
-    paddingBottom: 8,
+    borderColor: "#ccc",
+    paddingBottom: 8
   },
   inputForm: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     width: 320,
     height: 40,
     padding: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   todoItem: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 8,
     width: 320,
     borderBottomWidth: 1.5,
-    borderColor: '#e0e0e0',
-    backgroundColor: '#fff',
-    // border: '1 solid #333', 
+    borderColor: "#e0e0e0",
+    backgroundColor: "#fff",
+    // border: '1 solid #333',
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row"
   },
   todoText: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });
