@@ -6,9 +6,8 @@ import {
   StyleSheet,
   TextInput,
   Button,
-  ListView
+  Linking
 } from "react-native";
-// import { Constants } from 'expo';
 
 export default class App extends Component {
   state = {
@@ -54,16 +53,17 @@ export default class App extends Component {
     });
   };
 
+  showLocationOnMap = () => {
+    const url = `https://www.google.com.tw/maps?q=${
+      this.state.geolocation.coords.latitude
+    },${this.state.geolocation.coords.longitude}`; //,14.63z`
+    console.log(url);
+    Linking.openURL(url);
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        {this.state.geolocation ? (
-          <Text style={{ marginBottom: 15 }}>
-            {`lng: ${this.state.geolocation.coords.longitude}, lat: ${
-              this.state.geolocation.coords.latitude
-            }`}
-          </Text>
-        ) : null}
         <View style={styles.formView}>
           <TextInput
             style={styles.inputForm}
@@ -91,6 +91,12 @@ export default class App extends Component {
             );
           }}
         />
+        {this.state.geolocation ? (
+          <Button
+            title="Show Location On Map"
+            onPress={this.showLocationOnMap}
+          />
+        ) : null}
       </View>
     );
   }
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 20,
+    paddingVertical: 30,
     backgroundColor: "#eee"
   },
   formView: {
