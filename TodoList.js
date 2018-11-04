@@ -56,7 +56,7 @@ export default class App extends Component {
   showLocationOnMap = () => {
     const url = `https://www.google.com.tw/maps?q=${
       this.state.geolocation.coords.latitude
-    },${this.state.geolocation.coords.longitude}`; //,14.63z`
+    },${this.state.geolocation.coords.longitude}`;
     console.log(url);
     Linking.openURL(url);
   };
