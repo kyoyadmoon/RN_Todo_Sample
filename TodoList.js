@@ -9,6 +9,7 @@ import {
   Linking
 } from "react-native";
 
+
 export default class App extends Component {
   state = {
     inputValue: "",
@@ -64,6 +65,13 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.state.geolocation ? (
+          <Text style={{ marginBottom: 15 }}>
+            {`lng: ${this.state.geolocation.coords.longitude}, lat: ${
+              this.state.geolocation.coords.latitude
+            }`}
+          </Text>
+        ) : null}
         <View style={styles.formView}>
           <TextInput
             style={styles.inputForm}
